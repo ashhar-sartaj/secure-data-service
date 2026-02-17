@@ -12,13 +12,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000' //for
 export default function Home() {
   //what we want as input. party id as a string and payload as object with amount and currency.
 
-  const [partyId, setPartyId] = useState('');
+  const [recordId, setRecordId] = useState('');
   const [payloadText, setPayloadText] = useState('');
   const [result, setResult] = useState<any>(null); //will be the object that will be retunred from the backend on axios request. this is the decrypted object that may contain n number of keys ... so we dont know 
   const [transactionId, setTransactionid] = useState('');
 
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); //means it will be string or null
   const [loading, setLoading] = useState(false);
+  const [txsIdInputError, setTxsIdInputError] = useState<string | null>(null);
+  // const [template, setTemplate] = useState('');//template will be set when the user click on settemplate
 
   //since, our backend expects payload as an object.
   //first parse the payload
@@ -33,7 +35,7 @@ export default function Home() {
     //setting the states of error as null
     setError(null);
     //checking the validity of partyId
-    if (partyId.trim().length === 0) {
+    if (recordId.trim().length === 0) {
       setError('Invalid party id');
       return;
     }
@@ -43,14 +45,15 @@ export default function Home() {
     }
     const parsedPayload = parsePayload(payloadText); //this payloadText is coming from the state. it is of type string.. so we're converting it to js Obj
     //validating the parsedPayload.. that has partyId and payload js object.
-    if (parsedPayload.partyId.trim().length === 0) {
+    if (parsedPayload.recordId.trim().length === 0) {
       //will check the emptiness
       setError('Invalid payload');
       return;
     }
     //check that parsedPayload.payload must be a js object (should have keys, and not that user enters null or '' in front of payload key)
-    if (typeof parsedPayload.payload !== 'object' && typeof parsedPayload === null ) {
+    if (typeof parsedPayload.payload !== 'object' && typeof parsedPayload.payload === null ) {
       setError('Invalid payload')
+      return;
     }
     //we can further check for the keys of the parsedPayload..as typeof parsedPayload.payload.keyname
     
@@ -60,18 +63,24 @@ export default function Home() {
     // console.log(typeof partyId); //string
     // console.log(typeof parsedPayload.partyId)//string
     //check if both are equal: as partyId represents the one that is entered by user in the partyId ffirld. parsedPayload.partyId: represents the one entered by user in the payload field
-    if (!partyId === parsedPayload.partyId) {
-      setError('partyIds dont match');
+    if (!recordId === parsedPayload.recordId) {
+      setError('Record Ids dont match');
       return;
     }
     // if (partyId == parsedPayload.partyId)   
     setLoading(true);
       try {
+        console.log('record id from jsx:', recordId);
+        console.log('payload from jsx:', parsedPayload);
         //finally calling the encryption api
         const res = await axios.post(`${API_URL}/tx/encrypt`, {
-          partyId,
+          recordId: recordId,
           payload: parsedPayload
         })
+        console.log('record id from jsx:', recordId);
+        console.log('payload from jsx:', parsedPayload);
+        
+
         //both the partyId and payload are converted to json by axios and at the backend... payload is again converted back to js obj by axios
         //setting that record to result state and that record's id as transaction id 
         setResult(res.data);
@@ -80,7 +89,7 @@ export default function Home() {
         setError(err?.response?.data?.error || 'Error in encryption')
       } finally {
         setLoading(false)
-        setPartyId('');
+        setRecordId('');
         setPayloadText('');
         setTransactionid('');
       }
@@ -89,7 +98,8 @@ export default function Home() {
   //functio for get: /tx/:id = returns the asked record (encrypted)
   const  handleFetchEncryptedRecord = async () => {
     setError(null);
-    setResult(null);
+    setTxsIdInputError(null);
+    // setResult(null);
       //we have set the transaction id in the state.
       //first validate the transaction id. may be dont validate here, as its done in the backend.
       const transaction_id = transactionId;
@@ -107,7 +117,7 @@ export default function Home() {
         setError(err?.response?.data?.error || 'Error finding record- corresponding to the trnx id.')
       } finally {
         setLoading(false)
-        setPartyId('');
+        setRecordId('');
         setPayloadText('');
         setTransactionid('');
       }
@@ -135,35 +145,174 @@ export default function Home() {
 
   }
 
-  //placeholder to be placed in textarea field
-  const jsObjTemplate = {
-    partyId:"enter_id_here",
-    payload: {
-      amount: 1000,
-      currency:"INR",
-      note:"optional_extra_data"
-    }
-  }
-  const convertedJsObjToJsonTemplate=JSON.stringify(jsObjTemplate, null, 2); //supply this as place holder
+ 
 
+  const handleGenerateTemplate = () => {
+    //create out template as a js obj, and then json.stringify(over that object ).. by doing this, the user will enter the correct payload
+    const jsObjTemplate = {
+      recordId: 'record id',
+      payload: {
+        'Amount': 1000,
+        'Currency': 'INR'
+      }
+    }
+    const convertedJsObjToJsonTemplate = JSON.stringify(jsObjTemplate, null, 2); //supply this as place holder
+    //setting the state of template
+    setPayloadText(convertedJsObjToJsonTemplate)
+    //now in the teaxt area, it should be shown when state of template is not null. 
+  }
+
+  useEffect(() => {
+    if (!result) return;
+    console.log('result is: ', result)
+  }, [result])
+  // useEffect(() => {
+  //   if (!error) return;
+  //   console.log('error is: ', error)
+
+  // }, [error])
+
+  const handleRecordIdChange = (e: any) => {
+    //clear the error state if any
+    setError(null);
+    //setting the recordId state
+    setRecordId(e.target.value)
+
+  }
+  const handlePayloadTextChange = (e:any) => {
+    //clear the error state if any
+    setError(null);
+    setPayloadText(e.target.value)
+  }
+  const handleTxsIdChange = (e:any) => {
+    //clear the error state if any
+    setError(null)
+    setTxsIdInputError(null)
+    setTransactionid(e.target.value)
+  }
   
   return (
     <main>
       <div className="container">
         {/* Left Side */}
-        bhbvgvgvffcf
-        <section className="left-container">
+        {/* <section className="left-container"> */}
           {/* Your main content goes here */}
-        </section>
+          
+            {/* <div className="container"> */}
+              {/* LEFT SIDE: 80% */}
+              <section className="left-container">
+                <h1 className="title">Secure TXS</h1>
+
+                <div className="form-wrapper">
+                  {/* 1. Party ID */}
+                  <div className="partyid-div">
+                    <label htmlFor="party id" className="label">Record id</label>
+                    <input value={recordId} onChange={handleRecordIdChange} className="input-field recordId-input" placeholder="Record id" spellCheck={false}/>
+                  {error && (
+                <div className="error-message">
+                  <p>{error}</p>
+                </div>
+                  )}
+                  </div>
+
+                  {/* 2. Payload */}
+                  <div className="payload-div">
+                    <label htmlFor="payload" className="label">Payload</label>
+              <textarea name="payload" id="payload" value={payloadText} onChange={handlePayloadTextChange} className="textarea-field" rows={8} spellCheck={false}></textarea>
+              {error && (
+                <div className="error-message">
+                  <p>{error}</p>
+                </div>
+              )}
+                  </div>
+
+                  {/* 3. Encrypt & Save Button */}
+                  <div className="encrypt-save-div">
+                    <button className="btn" disabled={loading} onClick={handleEncrypt}>Encrypt & Save</button>
+                  </div>
+
+                  {/* 4. Transaction ID */}
+                  <div className="txsid-div">
+                    <label htmlFor="transactionId" className="label">Transaction id</label>
+              <input name="txs-id-input" value={transactionId} onChange={handleTxsIdChange} className="input-field txsId-input" disabled={result == null} placeholder="Enter id. (Get it from the encrypted result)" spellCheck={false}/>
+              {/* disabled = result == null checks both cases: result as null and undefined */}
+              {txsIdInputError && (
+                <div className="error-message">
+                  <p>{txsIdInputError}</p>
+                </div>
+              )}
+                  </div>
+
+                  {/* 5. Last two buttons */}
+                  <div className="action-buttons-div">
+                    {/* <button className="btn" disabled={!result} onClick={handleDecrypt}>Decrypt</button> */}
+                    <button className="btn secondary" disabled={!result} onClick={handleFetchEncryptedRecord}>Fetch record</button>
+                  </div>
+                </div>
+              </section>
+
+              {/* RIGHT SIDE: 20% */}
+              {/* <aside className="right-container">
+                <div className="result-container"></div>
+                <div className="info-container"></div>
+              </aside> */}
+            {/* </div> */}
+          
+        {/* </section> */}
 
         {/* Right Side */}
         <aside className="right-container">
           <div className="result-container">
             {/* Results logic */}
+            <div className="result-header">
+              <span>OUTPUT</span>
+              {result && (
+                <button className="copy-btn" onClick={() => navigator.clipboard.writeText(JSON.stringify(result, null, 2))}>
+                  Copy
+                </button>
+              )}
+            </div>
+            <div className="result-content">
+              {result ? (
+                <pre>{JSON.stringify(result, null, 2)}</pre>
+              ) : (
+                <p className="placeholder-text">Encrypted payload will appears here...</p>
+              )}
+            </div>
           </div>
+
           <div className="info-container">
             {/* Metadata/Info logic */}
+            <div className="info-header">
+              <h3>Quick Guide</h3>
+            </div>
+
+            <div className="info-scroll-box">
+              <section>
+                <h4>Overview</h4>
+                <p>Secure TXS provides <strong>AES-GCM</strong> standard encryption for financial & other payloads.</p>
+              </section>
+
+              <section>
+                <h4>Payload Helper</h4>
+                <p>Need a starting point? Generate a standard transaction schema below.</p>
+                <button  type="button" className="template-btn" onClick={handleGenerateTemplate}>
+                  Generate JSON Template
+                </button>
+              </section>
+
+              {/* <section>
+                <h4>Security Tips</h4>
+                <ul>
+                  <li>Always double-check the <strong>Party ID</strong>; it is crucial for record mapping.</li>
+                  <li>Encrypted payloads are stored using <strong>AES-256 GCM</strong> equivalent standards.</li>
+                </ul>
+              </section> */}
+            </div>
+
           </div>
+
+
         </aside>
       </div>
     </main>
