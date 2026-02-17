@@ -149,41 +149,60 @@ export default function Home() {
   
   return (
     <main>
-      <h1 className="title">Secure TXS</h1>
-      <div className="form-container">
-        <div className="input-group">
-          <label htmlFor="party id" className="label">Party Id</label>
-          <input value={partyId} onChange={(e) => setPartyId(e.target.value)} className="input-field" placeholder="Party Id"/>
-        </div>
+      <div className="container">
+        {/* Left Side */}
+        bhbvgvgvffcf
+        <section className="left-container">
+          {/* Your main content goes here */}
+        </section>
 
-        <div className="input-group">
-          <label htmlFor="payload" className="label">Payload</label>
-          <textarea name="payload" id="payload" value={payloadText} onChange={(e) => setPayloadText(e.target.value)} className="textarea-field" rows={8}
-          placeholder={convertedJsObjToJsonTemplate}></textarea>
-        </div>
-
-        <div className="button-group">
-          <button className="btn" disabled={loading} onClick={handleEncrypt}>Encrypt & Save</button>
-          <button className="btn" disabled={loading} onClick={handleFetchEncryptedRecord}>Fetch</button>
-          <button className="btn" disabled={loading} onClick={handleDecrypt}>Decrypt</button>
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="transactionId" className="label">Transaction id</label>
-          <input name="txs-id-input" value={transactionId} onChange={(e) => setTransactionid(e.target.value)} className="input-field" disabled={!result} placeholder="Enter id to search for."/>
-        </div>
-        {/* result-section  */}
-        {result && (
-          <pre className="result">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        )}
-        {/* error-section  */}
-        {error &&  (
-          <div className="error-box"><p className="error">{error}</p></div>
-        )}
-        
+        {/* Right Side */}
+        <aside className="right-container">
+          <div className="result-container">
+            {/* Results logic */}
+          </div>
+          <div className="info-container">
+            {/* Metadata/Info logic */}
+          </div>
+        </aside>
       </div>
     </main>
+    // <main>
+    //   <h1 className="title">Secure TXS</h1>
+    //   <div className="form-container">
+    //     <div className="input-group">
+    //       <label htmlFor="party id" className="label">Party Id</label>
+    //       <input value={partyId} onChange={(e) => setPartyId(e.target.value)} className="input-field" placeholder="Party Id"/>
+    //     </div>
+
+    //     <div className="input-group">
+    //       <label htmlFor="payload" className="label">Payload</label>
+    //       <textarea name="payload" id="payload" value={payloadText} onChange={(e) => setPayloadText(e.target.value)} className="textarea-field" rows={8}
+    //       placeholder={convertedJsObjToJsonTemplate}></textarea>
+    //     </div>
+
+    //     <div className="button-group">
+    //       <button className="btn" disabled={loading} onClick={handleEncrypt}>Encrypt & Save</button>
+    //       <button className="btn" disabled={loading} onClick={handleFetchEncryptedRecord}>Fetch</button>
+    //       <button className="btn" disabled={loading} onClick={handleDecrypt}>Decrypt</button>
+    //     </div>
+
+    //     <div className="input-group">
+    //       <label htmlFor="transactionId" className="label">Transaction id</label>
+    //       <input name="txs-id-input" value={transactionId} onChange={(e) => setTransactionid(e.target.value)} className="input-field" disabled={!result} placeholder="Enter id to search for."/>
+    //     </div>
+    //     {/* result-section  */}
+    //     {result && (
+    //       <pre className="result">
+    //         {JSON.stringify(result, null, 2)}
+    //       </pre>
+    //     )}
+    //     {/* error-section  */}
+    //     {error &&  (
+    //       <div className="error-box"><p className="error">{error}</p></div>
+    //     )}
+        
+    //   </div>
+    // </main>
   );
 }
