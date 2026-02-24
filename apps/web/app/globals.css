@@ -1,121 +1,352 @@
-/* @import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #6366f1;
+  --bg-dark: #242424;
+  --bg-lighter: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --text-main: #ffffff;
+  --text-muted: #9ca3af;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
- * {
+* {
   margin: 0;
   padding: 0;
- }
-main {
-    display: flex;
-      flex-direction: column;
-      align-items: center;
-      /* Centers your content */
-      width: 100%;
-      background: #f6f7fb;
-      height: 100vh;
 }
 
-.title {
-  font-size: 2.5rem;
-  font-weight: 600;
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  font-family: system-ui;
+  width: 100vw;
+  background: var(--bg-dark);
+  height: 100vh;
+  color: var(--text-main);
 }
-.form-container {
-width: 100%;
-  max-width: 600px;
-}
-.input-group {
-  margin-bottom: 16px;
-}
-.label {
-display: block;
-  font-weight: 600;
-  font-family: system-ui;
-  font-size: 1.2rem;
-}
-.input-field, 
-.textarea-field {
+
+
+
+
+/* The parent wrapper inside main */
+.container {
   width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    box-sizing: border-box;
-    font-size: 1rem;
-    
+  height: 100%;
+  display: flex;
+  /* Horizontal split by default */
+  overflow: hidden;
 }
-input.input-field:disabled {
-  /* font-family: system-ui; */
-  background-color: #f2f2f2;
-    color: #888;
-    border: 1px solid #ccc;
-    cursor: not-allowed;
-    opacity: 0.7;
+
+/* LEFT SIDE: The Prime Subject (80%) */
+.left-container {
+  flex: 6;
+  /* Occupies 70% */
+  background: var(--bg-dark);
+  border-right: 1px solid var(--border-color);
+
+  /* flex: 8; */
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    gap: 24px;
+    overflow-y: auto;
+}
+/* set the custom formatting to the scrollbar that divides left and right */
+.left-container::-webkit-scrollbar {
+  width: 8px;
+  /* Width: vertical scrollbar */
+  height: 8px;
+  /* Height:horizontal scrollbar */
+}
+
+.left-container::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+
+}
+
+.left-container::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+/* RIGHT SIDE: The Sidebar (20%) */
+.right-container {
+  flex: 4;
+  /* Occupies 40% */
+  display: flex;
+  flex-direction: column;
+  max-width: 30%;
+  /* Vertical stack: Result on top, Info on bottom */
+}
+
+/* Inside the Right Container */
+.result-container {
+  flex: 6;
+  /* Occupies 70% of the right container's height */
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-container {
+  flex: 4;
+  /* Occupies 30% of the right container's height */
+  background: var(--bg-lighter);
+}
+
+
+
+.title {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+/* A wrapper to limit the width of the forms so they don't stretch too wide on huge screens */
+.form-wrapper {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Individual Row Styling */
+.partyid-div,
+.payload-div,
+.txsid-div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.input-field,
+.textarea-field {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
 }
 .textarea-field {
-  font-family:ui-monospace;
+padding: 16px;
+  color: #10b981;
+  /* for code like */
+  font-family: 'Fira Code', 'Courier New', monospace;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  /*horizontal space between letters */
+  tab-size: 4;
+  /* indenting looks consistent */
+  resize: vertical;
 }
-.button-group {
-display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 20px 0;
+.input-field {
+padding: 12px 16px;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+.recordId-input {
+  color: var(--text-main)
+}
+
+input.tsxId-input { 
+  /* do the below style if you want your input tag of class tsxId-input to be disabled.. do not get confused that it will be disabled due to some state i.e null */
+    /* to implement disable (to override the browser disable method: as its cursor remains pointer.. and not prohibit type) */
+      /* cursor: not-allowed;
+      opacity: 0.7; */
+}
+/* to disable the tsxId-input class input when the state is null , then like below. !important will override the browser default disabled  */
+/* input.txsId-input:disabled {
+  cursor: not-allowed !important;
+} */
+
+input.txsId-input:disabled {
+  cursor: not-allowed ;
+}
+
+.input-field:focus,
+.textarea-field:focus {
+  border-color: var(--primary-color);
+}
+
+/* Button Grouping */
+.action-buttons-div {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.secondary {
+  background: #3d3d3d;
+  /* Different color for 'Fetch' */
+}
+
+.result-container {
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+  /* Darker terminal look */
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.result-content {
+  flex: 1;
+  overflow: auto;
+  /* Enables scrolling */
+  padding: 15px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  color: #10b981;
+  cursor:default;
+  /* Emerald green for "results" */
+  /* below is the cpde to force wrap the result which is in the pre tag...so pre tag behaviour to align as it is.. so entire result section is shifting leftwards.. to fix this, we need to force our formatting on pre tag */
+  /* overflow-x: hidden; */
+  /* word-break: break-all; */
+  /* white-space: pre-wrap; */
+}
+.result-content pre {
+  margin: 0;
+    max-width: 100%;
+}
+/* properties for horizontaal scrollbar for our recult-content */
+.result-content::-webkit-scrollbar {
+  width: 8px;
+  /* Width: vertical scrollbar */
+  height: 8px;
+  /* Height:horizontal scrollbar */
+}
+
+.result-content::-webkit-scrollbar-track {
+  background: var(--bg-dark);
   
 }
-.btn {
-  padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    background: white;
-    transition: background 0.2s;
-    font-family:system-ui;
-    font-size: 0.9rem;
-    background-color:black;
-    color: #fafafa;
+.result-content::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
 }
-.error-box {
+
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
+.copy-btn:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.info-container {
+  flex: 3;
+  padding: 20px;
+  background: var(--bg-lighter);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-container h3 {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
+
+.info-scroll-box {
+  overflow-y: auto;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.info-scroll-box h4 {
+  color: var(--text-main);
+  margin: 10px 0 5px 0;
+}
+
+.info-scroll-box code {
+  display: block;
+  background: #000;
+  padding: 5px;
+  border-radius: 4px;
+  margin: 5px 0;
+  color: #eab308;
+  /* Amber for code snippets */
+}
+
+.template-btn {
+  width: 100%;
+  margin-top: 10px;
   padding: 10px;
-    background-color: #ffe7e7;
-    border-radius: 10px;
-    color: #d32f2f;
-    margin-top: 10px;  
+  background: transparent;
+  border: 1px dashed var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-.error {
-  font-size: 1rem;
-  font-family: ui-monospace;
+
+.template-btn:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-style: solid;
 }
-.result {
-  padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    background-color: #fafafa;
+
+.info-scroll-box ul {
+  padding-left: 15px;
+  margin-top: 5px;
+}
+
+.info-scroll-box li {
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+}
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+    /* Muted Red (Tailwind-like) */
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    /* Light Red/Pink for readability */
+    padding: 6px 10px;
+    /* border-radius: 8px; */
     font-size: 0.7rem;
-    margin-top: 10px;
-    overflow-x: auto;
-    font-family: ui-monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 2px 0;
+    /* align-self:; */
+    /* max-width: 100px; */
+    /* animation: slideIn 0.3s ease-out; */
 }

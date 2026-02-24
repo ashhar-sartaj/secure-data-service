@@ -11,17 +11,21 @@ dotenv.config();
 function isNonEmptyString(str: unknown) : str is string {
     return typeof str === 'string' && str.trim().length > 0;
 }
-function validateBody(body: unknown) : {partyId: string, payload: unknown} | null {
-    if (!body || typeof body !== 'object') return null;
-    const b  = body  as {partyId?: unknown, payload?: unknown}
+function validateBody(body: unknown) : {recordId: string, payload: unknown} | null {
+    // console.log(typeof body); //object
+    console.log('body from backend',body);
+    if (!body || typeof body !== 'object' || typeof body === null) return null;
+    const b  = body  as {recordId?: unknown, payload?: unknown}
     //checking emptiness of partyId
-    if (!isNonEmptyString(b.partyId)) return null;
+    if (!isNonEmptyString(b.recordId)) return null;
     //below is what can be done to check if the b.payload is a valid js object (means it has keys).. so.. do if type of b.payload !== object && b.payload !== null because in js, type of null is an object, as a result we cant check if the user entered null value('': empty string is null) as a payload obect.
     // 2 ways to check 
     //1
     // if (typeof b.payload === 'undefined') return null;
-    if (typeof b.partyId !== 'object' && typeof b.partyId !== null ) return null
-    return {partyId: b.partyId, payload: b.payload};
+    console.log('b.payload',b.payload);
+    // console.log(typeof body);
+    if (typeof b.payload !== 'object' || typeof b.payload === null ) return null
+    return { recordId: b.recordId, payload: b.payload};
     // console.log(body);
     // return null;
 }
@@ -47,7 +51,9 @@ function isHex(str: string): boolean {
 export async function routes (app: FastifyInstance) {
     //POST: /tx/encrypt output will be the record that just got encrypted
     app.post('/tx/encrypt', async (request, reply) => {
-        const body  = validateBody(request.body);
+        const body = validateBody(request.body);
+        // const body = request.body
+        console.log(body);
         //if my body includes null: throw error
         if (!body) {
             return reply.code(400).send({error: 'invalid body'})
@@ -60,7 +66,7 @@ export async function routes (app: FastifyInstance) {
         try {
             const result = encryptTnx({
                 payload: body.payload,
-                partyId: body.partyId,
+                partyId: body.recordId,
                 mkHex: hexMasterKey
             })
             //setting this result to the recordsLibrary
