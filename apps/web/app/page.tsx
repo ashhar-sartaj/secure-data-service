@@ -290,7 +290,7 @@ export default function Home() {
             <div className="info-scroll-box">
               <section>
                 <h4>Overview</h4>
-                <p>Secure TXS provides <strong>AES-GCM</strong> standard encryption for financial & other payloads.</p>
+                <p>Secure TXS provides <strong>AES-256-GCM</strong> standard encryption for financial & other payloads.</p>
               </section>
 
               <section>
