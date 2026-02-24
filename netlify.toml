@@ -1,0 +1,6 @@
+[build]
+  command = "pnpm install && pnpm turbo build --filter=@repo/web"
+  publish = "apps/web/.next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
