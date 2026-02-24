@@ -151,13 +151,13 @@ padding: 12px 16px;
 .recordId-input {
   color: var(--text-main)
 }
-
-input.tsxId-input { 
-  /* do the below style if you want your input tag of class tsxId-input to be disabled.. do not get confused that it will be disabled due to some state i.e null */
-    /* to implement disable (to override the browser disable method: as its cursor remains pointer.. and not prohibit type) */
-      /* cursor: not-allowed;
+/* do the below style if you want your input tag of class tsxId-input to be disabled.. do not get confused that it will be disabled due to some state i.e null */
+/* to implement disable (to override the browser disable method: as its cursor remains pointer.. and not prohibit type) */
+/* cursor: not-allowed;
       opacity: 0.7; */
-}
+/* input.tsxId-input { 
+  
+} */
 /* to disable the tsxId-input class input when the state is null , then like below. !important will override the browser default disabled  */
 /* input.txsId-input:disabled {
   cursor: not-allowed !important;
