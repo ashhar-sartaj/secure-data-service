@@ -194,11 +194,6 @@ export default function Home() {
   return (
     <main>
       <div className="container">
-        {/* Left Side */}
-        {/* <section className="left-container"> */}
-          {/* Your main content goes here */}
-          
-            {/* <div className="container"> */}
               {/* LEFT SIDE: 80% */}
               <section className="left-container">
                 <h1 className="title">Secure TXS</h1>
@@ -300,14 +295,6 @@ export default function Home() {
                   Generate JSON Template
                 </button>
               </section>
-
-              {/* <section>
-                <h4>Security Tips</h4>
-                <ul>
-                  <li>Always double-check the <strong>Party ID</strong>; it is crucial for record mapping.</li>
-                  <li>Encrypted payloads are stored using <strong>AES-256 GCM</strong> equivalent standards.</li>
-                </ul>
-              </section> */}
             </div>
 
           </div>
@@ -316,42 +303,5 @@ export default function Home() {
         </aside>
       </div>
     </main>
-    // <main>
-    //   <h1 className="title">Secure TXS</h1>
-    //   <div className="form-container">
-    //     <div className="input-group">
-    //       <label htmlFor="party id" className="label">Party Id</label>
-    //       <input value={partyId} onChange={(e) => setPartyId(e.target.value)} className="input-field" placeholder="Party Id"/>
-    //     </div>
-
-    //     <div className="input-group">
-    //       <label htmlFor="payload" className="label">Payload</label>
-    //       <textarea name="payload" id="payload" value={payloadText} onChange={(e) => setPayloadText(e.target.value)} className="textarea-field" rows={8}
-    //       placeholder={convertedJsObjToJsonTemplate}></textarea>
-    //     </div>
-
-    //     <div className="button-group">
-    //       <button className="btn" disabled={loading} onClick={handleEncrypt}>Encrypt & Save</button>
-    //       <button className="btn" disabled={loading} onClick={handleFetchEncryptedRecord}>Fetch</button>
-    //       <button className="btn" disabled={loading} onClick={handleDecrypt}>Decrypt</button>
-    //     </div>
-
-    //     <div className="input-group">
-    //       <label htmlFor="transactionId" className="label">Transaction id</label>
-    //       <input name="txs-id-input" value={transactionId} onChange={(e) => setTransactionid(e.target.value)} className="input-field" disabled={!result} placeholder="Enter id to search for."/>
-    //     </div>
-    //     {/* result-section  */}
-    //     {result && (
-    //       <pre className="result">
-    //         {JSON.stringify(result, null, 2)}
-    //       </pre>
-    //     )}
-    //     {/* error-section  */}
-    //     {error &&  (
-    //       <div className="error-box"><p className="error">{error}</p></div>
-    //     )}
-        
-    //   </div>
-    // </main>
   );
 }
